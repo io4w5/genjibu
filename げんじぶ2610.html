@@ -1,0 +1,1034 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f0ecfa">
+<title>げんじぶ 歌詞で選ぶ曲リスト</title>
+<style>
+:root{color-scheme:light;--bg:#f5f2fc;--ink:#35294f;--muted:#6c6190;--line:#e0d8f0;--accent:#6a52b0;
+--A:#5a4bb8;--At:#ebe9fb;--Am:#b3abea;--B:#9a3d93;--Bt:#f8e8f5;--Bm:#dcaad6;--C:#76599f;--Ct:#f0e9f7;--Cm:#c7b0e0;--D:#46307f;--Dt:#e5dff3;--Dm:#9d8dcf}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Noto Sans JP",system-ui,sans-serif;font-weight:400;line-height:1.6;touch-action:manipulation}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(60% 38% at 92% 0%,rgba(226,190,240,.5),transparent 70%),radial-gradient(70% 42% at 0% 22%,rgba(184,172,244,.45),transparent 70%),radial-gradient(60% 40% at 100% 88%,rgba(210,176,236,.4),transparent 70%),linear-gradient(#f9f7fd,#f0ecfa)}
+main{max-width:640px;margin:0 auto;padding:calc(26px + env(safe-area-inset-top,0px)) calc(16px + env(safe-area-inset-right,0px)) calc(48px + env(safe-area-inset-bottom,0px)) calc(16px + env(safe-area-inset-left,0px))}
+header{margin-bottom:20px}
+.eyebrow{margin:0;color:var(--muted);font-size:11px;letter-spacing:.2em}
+h1{margin:6px 0 8px;font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;font-size:clamp(20px,5.8vw,26px);line-height:1.45;font-weight:400;letter-spacing:.1em;color:var(--ink)}
+.intro{margin:0;color:var(--muted);font-size:12px;letter-spacing:.04em}
+h2{margin:0;font-size:12px;font-weight:400;letter-spacing:.14em;color:var(--muted)}
+button,a{-webkit-tap-highlight-color:transparent}
+button{font:inherit;cursor:pointer}
+.panel{background:rgba(255,255,255,.62);border:1px solid rgba(255,255,255,.9);border-radius:22px;padding:16px;box-shadow:0 10px 32px rgba(120,96,190,.14);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+fieldset{border:0;margin:0;padding:0;min-width:0}
+legend{padding:0;margin-bottom:12px;font-weight:400;font-size:12px;letter-spacing:.1em;color:var(--muted)}
+.filters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.filter{--c:var(--accent);--t:#fff;--m:var(--line);position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:8px;text-align:left;min-height:92px;padding:11px 12px;background:rgba(255,255,255,.7);color:var(--ink);border:1.5px solid var(--line);border-radius:16px;transition:background-color .15s,border-color .15s}
+.filter[data-category=A]{--c:var(--A);--t:var(--At);--m:var(--Am)}
+.filter[data-category=B]{--c:var(--B);--t:var(--Bt);--m:var(--Bm)}
+.filter[data-category=C]{--c:var(--C);--t:var(--Ct);--m:var(--Cm)}
+.filter[data-category=D]{--c:var(--D);--t:var(--Dt);--m:var(--Dm)}
+.letter{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--t);color:var(--c);border:1px solid var(--m);font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;font-size:16px;font-weight:400;line-height:1;flex-shrink:0}
+.label{font-size:12px;line-height:1.55;font-weight:400;letter-spacing:.02em;word-break:auto-phrase;line-break:strict;text-wrap:balance}
+.check{position:absolute;top:9px;right:10px;color:#fff;font-size:10px;width:18px;height:18px;border-radius:50%;background:var(--c);display:flex;align-items:center;justify-content:center;visibility:hidden}
+.filter[aria-pressed=true]{background:linear-gradient(135deg,var(--t),rgba(255,255,255,.85));border-color:var(--m)}
+.filter[aria-pressed=true] .letter{background:var(--c);color:#fff;border-color:var(--c)}
+.filter[aria-pressed=true] .check{visibility:visible}
+.rule{margin:14px 0 0;color:var(--muted);font-size:11px;line-height:1.7}
+.results{margin-top:18px}
+.result-bar{position:sticky;top:0;z-index:5;margin:0 -16px 12px;padding:8px 16px;background:rgba(246,243,252,.82);border-bottom:1px solid rgba(205,190,236,.6);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.result-head{display:flex;align-items:baseline;gap:12px}
+.count{font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;font-size:26px;font-weight:400;line-height:1.3;color:var(--ink);font-variant-numeric:tabular-nums}
+.reset{align-self:center;margin-left:auto;min-height:44px;padding:0 20px;background:rgba(255,255,255,.7);color:var(--accent);border:1px solid #c6bae6;border-radius:22px;font-size:12px;letter-spacing:.12em}
+.reset:active{background:var(--Dt)}
+.mode{margin:0;color:var(--muted);font-size:11px;line-height:1.5;min-height:1.5em;letter-spacing:.03em}
+.songs{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.song{display:flex;gap:12px;align-items:center;justify-content:space-between;background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.95);border-radius:16px;padding:10px 10px 10px 16px;min-height:64px;box-shadow:0 4px 16px rgba(120,96,190,.1)}
+.song-info{min-width:0}
+.song-title{margin:0;font-size:15px;font-weight:500;line-height:1.5;letter-spacing:.03em;overflow-wrap:anywhere}
+.tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px}
+.tag{min-width:22px;text-align:center;border-radius:11px;background:var(--At);color:var(--A);font-size:10px;line-height:1.7;padding:0 7px;letter-spacing:.04em}
+.tag[data-category=B]{background:var(--Bt);color:var(--B)}
+.tag[data-category=C]{background:var(--Ct);color:var(--C)}
+.tag[data-category=D]{background:var(--Dt);color:var(--D)}
+.play{display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:50%;background:#fff;color:var(--accent);border:1px solid #c6bae6;text-decoration:none;flex-shrink:0;font-size:14px;padding-left:3px}
+.play:active{background:var(--Dt)}
+.empty{margin:0;text-align:center;padding:36px 16px;border:1px dashed #c6bae6;border-radius:16px;color:var(--muted);font-size:13px;letter-spacing:.06em}
+footer{margin-top:30px;color:var(--muted);font-size:11px;line-height:1.8}
+button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+[hidden]{display:none!important}
+@media(min-width:560px){.filters{grid-template-columns:repeat(4,minmax(0,1fr))}.filter{min-height:112px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+<header><p class="eyebrow">原因は自分にある。</p><h1>歌詞の系統から、曲を選ぶ。</h1><p class="intro">気になる分類を選んで、聴きたい曲を探せます。</p></header>
+<section class="panel" aria-label="曲の絞り込み">
+<fieldset><legend>分類を選択（複数選択可）</legend><div id="filters" class="filters"></div></fieldset>
+<p class="rule">1〜3個を選ぶと、選んだ分類すべてに当てはまる曲を表示。A〜Dをすべて選ぶと全曲を表示します。</p>
+</section>
+<section class="results" aria-labelledby="result-title">
+<div class="result-bar"><div class="result-head"><h2 id="result-title">曲リスト</h2><span id="count" class="count" role="status" aria-live="polite" aria-atomic="true">0曲</span><button id="reset" class="reset" type="button">リセット</button></div>
+<p id="mode" class="mode"></p></div>
+<p id="empty" class="empty">A〜Dから分類を選んでください。</p><ul id="songs" class="songs"></ul></section>
+<footer>▶ を押すとApple Musicの曲ページが開きます。再生操作はApple Music側で行ってください。<br>読みのあいうえお順で表示。分類は歌詞の解釈に基づく個人用の目安です。<br>収録データ：2026年10月4日確認の84曲（劇中歌版を含む）。</footer>
+<noscript>この曲リストを使うには、ブラウザのJavaScriptを有効にしてください。</noscript>
+</main>
+<!-- 曲データ：更新時はこのJSONを編集。ID・分類・採用済みURLを維持してください。 -->
+<script id="song-data" type="application/json">{
+  "artist": "原因は自分にある。",
+  "verifiedOn": "2026-10-04",
+  "categoryDefinitions": {
+    "A": "概念・矛盾・社会観察",
+    "B": "恋心や関係を考える",
+    "C": "個人の価値・自己像・記憶・大切な関係",
+    "D": "行動・高揚・祝祭"
+  },
+  "songs": [
+    {
+      "id": "gnjb-029",
+      "title": "藍色閃光",
+      "categories": [
+        "C"
+      ],
+      "reading": "あいいろせんこう",
+      "sortKey": "あいいろせんこう",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E8%97%8D%E8%89%B2%E9%96%83%E5%85%89/1595790437"
+    },
+    {
+      "id": "gnjb-046",
+      "title": "愛無常",
+      "categories": [
+        "B",
+        "C"
+      ],
+      "reading": "あいむじょう",
+      "sortKey": "あいむじょう",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E6%84%9B%E7%84%A1%E5%B8%B8/1880024614"
+    },
+    {
+      "id": "gnjb-059",
+      "title": "青、その他",
+      "categories": [
+        "C"
+      ],
+      "reading": "あおそのほか",
+      "sortKey": "あおそのほか",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E9%9D%92-%E3%81%9D%E3%81%AE%E4%BB%96/1609514119"
+    },
+    {
+      "id": "gnjb-083",
+      "title": "Up and Down",
+      "categories": [
+        "B",
+        "C"
+      ],
+      "reading": "あっぷあんどだうん",
+      "sortKey": "あっぷあんどだうん",
+      "appleMusicUrl": "https://music.apple.com/jp/song/up-and-down/1480622921"
+    },
+    {
+      "id": "gnjb-033",
+      "title": "貴方に溺れて、僕は潤んで。",
+      "categories": [
+        "B",
+        "C"
+      ],
+      "reading": "あなたにおぼれてぼくはうるんで",
+      "sortKey": "あなたにおぼれてぼくはうるんで",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E8%B2%B4%E6%96%B9%E3%81%AB%E6%BA%BA%E3%82%8C%E3%81%A6-%E5%83%95%E3%81%AF%E6%BD%A4%E3%82%93%E3%81%A6/1638250501"
+    },
+    {
+      "id": "gnjb-025",
+      "title": "貴方らしく",
+      "categories": [
+        "C"
+      ],
+      "reading": "あなたらしく",
+      "sortKey": "あなたらしく",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E8%B2%B4%E6%96%B9%E3%82%89%E3%81%97%E3%81%8F/1807467642"
+    },
+    {
+      "id": "gnjb-062",
+      "title": "アビスと清らな銀世界",
+      "categories": [
+        "A",
+        "D"
+      ],
+      "reading": "あびすときよらなぎんせかい",
+      "sortKey": "あびすときよらなぎんせかい",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E3%82%A2%E3%83%93%E3%82%B9%E3%81%A8%E6%B8%85%E3%82%89%E3%81%AA%E9%8A%80%E4%B8%96%E7%95%8C/1781057265"
+    },
+    {
+      "id": "gnjb-080",
+      "title": "犬と猫とミルクにシュガー",
+      "categories": [
+        "A",
+        "C"
+      ],
+      "reading": "いぬとねことみるくにしゅがー",
+      "sortKey": "いぬとねことみるくにしゅがー",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E7%8A%AC%E3%81%A8%E7%8C%AB%E3%81%A8%E3%83%9F%E3%83%AB%E3%82%AF%E3%81%AB%E3%82%B7%E3%83%A5%E3%82%AC%E3%83%BC/1562605620"
+    },
+    {
+      "id": "gnjb-066",
+      "title": "夢之相 - イメノアイ",
+      "categories": [
+        "A",
+        "C"
+      ],
+      "reading": "いめのあい",
+      "sortKey": "いめのあい",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E5%A4%A2%E4%B9%8B%E7%9B%B8-%E3%82%A4%E3%83%A1%E3%83%8E%E3%82%A2%E3%82%A4/1772647934"
+    },
+    {
+      "id": "gnjb-078",
+      "title": "以呂波 feat. fox capture plan",
+      "categories": [
+        "A",
+        "C"
+      ],
+      "reading": "いろはふぃーちゃりんぐふぉっくすきゃぷちゃーぷらん",
+      "sortKey": "いろはふぃーちゃりんぐふぉっくすきゃぷちゃーぷらん",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E4%BB%A5%E5%91%82%E6%B3%A2-feat-fox-capture-plan/1572217924"
+    },
+    {
+      "id": "gnjb-002",
+      "title": "因果応報アンチノミー",
+      "categories": [
+        "A"
+      ],
+      "reading": "いんがおうほうあんちのみー",
+      "sortKey": "いんがおうほうあんちのみー",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E5%9B%A0%E6%9E%9C%E5%BF%9C%E5%A0%B1%E3%82%A2%E3%83%B3%E3%83%81%E3%83%8E%E3%83%9F%E3%83%BC/1807467620"
+    },
+    {
+      "id": "gnjb-023",
+      "title": "In the Nude",
+      "categories": [
+        "B",
+        "D"
+      ],
+      "reading": "いんざぬーど",
+      "sortKey": "いんざぬーど",
+      "appleMusicUrl": "https://music.apple.com/jp/song/in-the-nude/1542565718"
+    },
+    {
+      "id": "gnjb-065",
+      "title": "in the Fate",
+      "categories": [
+        "C",
+        "D"
+      ],
+      "reading": "いんざふぇいと",
+      "sortKey": "いんざふぇいと",
+      "appleMusicUrl": "https://music.apple.com/jp/song/in-the-fate/1807467633"
+    },
+    {
+      "id": "gnjb-022",
+      "title": "嘘から始まる自称系",
+      "categories": [
+        "A",
+        "C"
+      ],
+      "reading": "うそからはじまるじしょうけい",
+      "sortKey": "うそからはじまるじしょうけい",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E5%98%98%E3%81%8B%E3%82%89%E5%A7%8B%E3%81%BE%E3%82%8B%E8%87%AA%E7%A7%B0%E7%B3%BB/1503425540"
+    },
+    {
+      "id": "gnjb-027",
+      "title": "美しい人",
+      "categories": [
+        "C"
+      ],
+      "reading": "うつくしいひと",
+      "sortKey": "うつくしいひと",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E7%BE%8E%E3%81%97%E3%81%84%E4%BA%BA/1731158295"
+    },
+    {
+      "id": "gnjb-031",
+      "title": "LLL",
+      "categories": [
+        "B",
+        "D"
+      ],
+      "reading": "えるえるえる",
+      "sortKey": "えるえるえる",
+      "appleMusicUrl": "https://music.apple.com/jp/song/lll/1797438637"
+    },
+    {
+      "id": "gnjb-006",
+      "title": "Operation Ego",
+      "categories": [
+        "A",
+        "C"
+      ],
+      "reading": "おぺれーしょんえご",
+      "sortKey": "おぺれーしょんえご",
+      "appleMusicUrl": "https://music.apple.com/jp/song/operation-ego/1778061348"
+    },
+    {
+      "id": "gnjb-005",
+      "title": "火宴",
+      "categories": [
+        "D"
+      ],
+      "reading": "かえん",
+      "sortKey": "かえん",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E7%81%AB%E5%AE%B4/6781905374"
+    },
+    {
+      "id": "gnjb-024",
+      "title": "幽かな夜の夢",
+      "categories": [
+        "B",
+        "C"
+      ],
+      "reading": "かすかなよるのゆめ",
+      "sortKey": "かすかなよるのゆめ",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E5%B9%BD%E3%81%8B%E3%81%AA%E5%A4%9C%E3%81%AE%E5%A4%A2/1534070866"
+    },
+    {
+      "id": "gnjb-061",
+      "title": "カラフるワンダフル",
+      "categories": [
+        "C",
+        "D"
+      ],
+      "reading": "からふるわんだふる",
+      "sortKey": "からふるわんだふる",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E3%82%AB%E3%83%A9%E3%83%95%E3%82%8B%E3%83%AF%E3%83%B3%E3%83%80%E3%83%95%E3%83%AB/1807467630"
+    },
+    {
+      "id": "gnjb-017",
+      "title": "希望的観測の定義",
+      "categories": [
+        "A",
+        "D"
+      ],
+      "reading": "きぼうてきかんそくのていぎ",
+      "sortKey": "きぼうてきかんそくのていぎ",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E5%B8%8C%E6%9C%9B%E7%9A%84%E8%A6%B3%E6%B8%AC%E3%81%AE%E5%AE%9A%E7%BE%A9/1843294378"
+    },
+    {
+      "id": "gnjb-057",
+      "title": "ギミギミラブ",
+      "categories": [
+        "B",
+        "D"
+      ],
+      "reading": "ぎみぎみらぶ",
+      "sortKey": "ぎみぎみらぶ",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E3%82%AE%E3%83%9F%E3%82%AE%E3%83%9F%E3%83%A9%E3%83%96/1480622919"
+    },
+    {
+      "id": "gnjb-050",
+      "title": "キミヲナクシテ",
+      "categories": [
+        "C"
+      ],
+      "reading": "きみをなくして",
+      "sortKey": "きみをなくして",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E3%82%AD%E3%83%9F%E3%83%B2%E3%83%8A%E3%82%AF%E3%82%B7%E3%83%86/1613468570"
+    },
+    {
+      "id": "gnjb-039",
+      "title": "Q",
+      "categories": [
+        "C",
+        "D"
+      ],
+      "reading": "きゅー",
+      "sortKey": "きゅー",
+      "appleMusicUrl": "https://music.apple.com/jp/song/q/1648766588"
+    },
+    {
+      "id": "gnjb-032",
+      "title": "ケイカクドヲリ",
+      "categories": [
+        "A",
+        "B"
+      ],
+      "reading": "けいかくどをり",
+      "sortKey": "けいかくどをり",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E3%82%B1%E3%82%A4%E3%82%AB%E3%82%AF%E3%83%89%E3%83%B2%E3%83%AA/1731158288"
+    },
+    {
+      "id": "gnjb-047",
+      "title": "結末は次のトラフィックライト",
+      "categories": [
+        "B",
+        "C"
+      ],
+      "reading": "けつまつはつぎのとらふぃっくらいと",
+      "sortKey": "けつまつはつぎのとらふぃっくらいと",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E7%B5%90%E6%9C%AB%E3%81%AF%E6%AC%A1%E3%81%AE%E3%83%88%E3%83%A9%E3%83%95%E3%82%A3%E3%83%83%E3%82%AF%E3%83%A9%E3%82%A4%E3%83%88/1610359971"
+    },
+    {
+      "id": "gnjb-010",
+      "title": "原因は君にもある。",
+      "categories": [
+        "A",
+        "C"
+      ],
+      "reading": "げんいんはきみにもある",
+      "sortKey": "げんいんはきみにもある",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E5%8E%9F%E5%9B%A0%E3%81%AF%E5%90%9B%E3%81%AB%E3%82%82%E3%81%82%E3%82%8B/1628262198"
+    },
+    {
+      "id": "gnjb-001",
+      "title": "原因は自分にある。",
+      "categories": [
+        "A",
+        "B"
+      ],
+      "reading": "げんいんはじぶんにある",
+      "sortKey": "げんいんはじぶんにある",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E5%8E%9F%E5%9B%A0%E3%81%AF%E8%87%AA%E5%88%86%E3%81%AB%E3%81%82%E3%82%8B/1479492330"
+    },
+    {
+      "id": "gnjb-064",
+      "title": "豪雨",
+      "categories": [
+        "C"
+      ],
+      "reading": "ごうう",
+      "sortKey": "ごうう",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E8%B1%AA%E9%9B%A8/1589020820"
+    },
+    {
+      "id": "gnjb-076",
+      "title": "Go to the Moon",
+      "categories": [
+        "A",
+        "D"
+      ],
+      "reading": "ごーとぅざむーん",
+      "sortKey": "ごーとぅざむーん",
+      "appleMusicUrl": "https://music.apple.com/jp/song/go-to-the-moon/1778061831"
+    },
+    {
+      "id": "gnjb-052",
+      "title": "545",
+      "categories": [
+        "C"
+      ],
+      "reading": "ごーよんご",
+      "sortKey": "ごーよんご",
+      "appleMusicUrl": "https://music.apple.com/jp/song/545/1620746705"
+    },
+    {
+      "id": "gnjb-068",
+      "title": "GOD 釈迦にHip-Hop",
+      "categories": [
+        "A",
+        "D"
+      ],
+      "reading": "ごっどしゃかにひっぷほっぷ",
+      "sortKey": "ごっどしゃかにひっぷほっぷ",
+      "appleMusicUrl": "https://music.apple.com/jp/song/god-%E9%87%88%E8%BF%A6%E3%81%ABhip-hop/1687442143"
+    },
+    {
+      "id": "gnjb-058",
+      "title": "Silence",
+      "categories": [
+        "B"
+      ],
+      "reading": "さいれんす",
+      "sortKey": "さいれんす",
+      "appleMusicUrl": "https://music.apple.com/jp/song/silence/1880024616"
+    },
+    {
+      "id": "gnjb-077",
+      "title": "桜Ground",
+      "categories": [
+        "C",
+        "D"
+      ],
+      "reading": "さくらぐらうんど",
+      "sortKey": "さくらぐらうんど",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E6%A1%9Cground/1661239126"
+    },
+    {
+      "id": "gnjb-038",
+      "title": "柘榴",
+      "categories": [
+        "C"
+      ],
+      "reading": "ざくろ",
+      "sortKey": "ざくろ",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E6%9F%98%E6%A6%B4/1542565381"
+    },
+    {
+      "id": "gnjb-012",
+      "title": "シェイクスピアに学ぶ恋愛定理",
+      "categories": [
+        "B"
+      ],
+      "reading": "しぇいくすぴあにまなぶれんあいていり",
+      "sortKey": "しぇいくすぴあにまなぶれんあいていり",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E3%82%B7%E3%82%A7%E3%82%A4%E3%82%AF%E3%82%B9%E3%83%94%E3%82%A2%E3%81%AB%E5%AD%A6%E3%81%B6%E6%81%8B%E6%84%9B%E5%AE%9A%E7%90%86/1519384789"
+    },
+    {
+      "id": "gnjb-069",
+      "title": "THE EMPATHY",
+      "categories": [
+        "C",
+        "D"
+      ],
+      "reading": "じえんぱしー",
+      "sortKey": "じえんぱしー",
+      "appleMusicUrl": "https://music.apple.com/jp/song/the-empathy/1687442142"
+    },
+    {
+      "id": "gnjb-008",
+      "title": "嗜好に関する世論調査",
+      "categories": [
+        "A"
+      ],
+      "reading": "しこうにかんするよろんちょうさ",
+      "sortKey": "しこうにかんするよろんちょうさ",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E5%97%9C%E5%A5%BD%E3%81%AB%E9%96%A2%E3%81%99%E3%82%8B%E4%B8%96%E8%AB%96%E8%AA%BF%E6%9F%BB/1490955329"
+    },
+    {
+      "id": "gnjb-073",
+      "title": "時速3km",
+      "categories": [
+        "C"
+      ],
+      "reading": "じそくさんきろめーとる",
+      "sortKey": "じそくさんきろめーとる",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E6%99%82%E9%80%9F3km/1492703429"
+    },
+    {
+      "id": "gnjb-035",
+      "title": "疾走",
+      "categories": [
+        "D"
+      ],
+      "reading": "しっそう",
+      "sortKey": "しっそう",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E7%96%BE%E8%B5%B0/1880024613"
+    },
+    {
+      "id": "gnjb-048",
+      "title": "ジュトゥブ",
+      "categories": [
+        "B",
+        "C"
+      ],
+      "reading": "じゅとぅぶ",
+      "sortKey": "じゅとぅぶ",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E3%82%B8%E3%83%A5%E3%83%88%E3%82%A5%E3%83%96/1492703417"
+    },
+    {
+      "id": "gnjb-081",
+      "title": "Joy to the world",
+      "categories": [
+        "C",
+        "D"
+      ],
+      "reading": "じょいとぅざわーるど",
+      "sortKey": "じょいとぅざわーるど",
+      "appleMusicUrl": "https://music.apple.com/jp/song/joy-to-the-world/1492703414"
+    },
+    {
+      "id": "gnjb-026",
+      "title": "小説ならば",
+      "categories": [
+        "C"
+      ],
+      "reading": "しょうせつならば",
+      "sortKey": "しょうせつならば",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E5%B0%8F%E8%AA%AC%E3%81%AA%E3%82%89%E3%81%B0/1778061830"
+    },
+    {
+      "id": "gnjb-051",
+      "title": "J*O*K*E*R",
+      "categories": [
+        "A",
+        "D"
+      ],
+      "reading": "じょーかー",
+      "sortKey": "じょーかー",
+      "appleMusicUrl": "https://music.apple.com/jp/song/j-o-k-e-r/1595790434"
+    },
+    {
+      "id": "gnjb-004",
+      "title": "推論的に宇宙人",
+      "categories": [
+        "B"
+      ],
+      "reading": "すいろんてきにうちゅうじん",
+      "sortKey": "すいろんてきにうちゅうじん",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E6%8E%A8%E8%AB%96%E7%9A%84%E3%81%AB%E5%AE%87%E5%AE%99%E4%BA%BA/1731158296"
+    },
+    {
+      "id": "gnjb-034",
+      "title": "スノウダンス",
+      "categories": [
+        "C"
+      ],
+      "reading": "すのうだんす",
+      "sortKey": "すのうだんす",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E3%82%B9%E3%83%8E%E3%82%A6%E3%83%80%E3%83%B3%E3%82%B9/1542565719"
+    },
+    {
+      "id": "gnjb-055",
+      "title": "0to1の幻想",
+      "categories": [
+        "A",
+        "B"
+      ],
+      "reading": "ぜろといちのげんそう",
+      "sortKey": "ぜろといちのげんそう",
+      "appleMusicUrl": "https://music.apple.com/jp/song/0to1%E3%81%AE%E5%B9%BB%E6%83%B3/1595790435"
+    },
+    {
+      "id": "gnjb-020",
+      "title": "ダイヤモンドリリー",
+      "categories": [
+        "C"
+      ],
+      "reading": "だいやもんどりりー",
+      "sortKey": "だいやもんどりりー",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E3%83%80%E3%82%A4%E3%83%A4%E3%83%A2%E3%83%B3%E3%83%89%E3%83%AA%E3%83%AA%E3%83%BC/1722086601"
+    },
+    {
+      "id": "gnjb-053",
+      "title": "黄昏よりも早く疾走れ",
+      "categories": [
+        "C",
+        "D"
+      ],
+      "reading": "たそがれよりもはやくはしれ",
+      "sortKey": "たそがれよりもはやくはしれ",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E9%BB%84%E6%98%8F%E3%82%88%E3%82%8A%E3%82%82%E6%97%A9%E3%81%8F%E7%96%BE%E8%B5%B0%E3%82%8C/1591870255"
+    },
+    {
+      "id": "gnjb-074",
+      "title": "多分、僕のソネット",
+      "categories": [
+        "C"
+      ],
+      "reading": "たぶんぼくのそねっと",
+      "sortKey": "たぶんぼくのそねっと",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E5%A4%9A%E5%88%86-%E5%83%95%E3%81%AE%E3%82%BD%E3%83%8D%E3%83%83%E3%83%88/1807467640"
+    },
+    {
+      "id": "gnjb-054",
+      "title": "誰も知らない歌",
+      "categories": [
+        "C"
+      ],
+      "reading": "だれもしらないうた",
+      "sortKey": "だれもしらないうた",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E8%AA%B0%E3%82%82%E7%9F%A5%E3%82%89%E3%81%AA%E3%81%84%E6%AD%8C/1731158449"
+    },
+    {
+      "id": "gnjb-015",
+      "title": "チョコループ",
+      "categories": [
+        "B",
+        "D"
+      ],
+      "reading": "ちょこるーぷ",
+      "sortKey": "ちょこるーぷ",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E3%83%81%E3%83%A7%E3%82%B3%E3%83%AB%E3%83%BC%E3%83%97/1642197649"
+    },
+    {
+      "id": "gnjb-009",
+      "title": "トレモロ",
+      "categories": [
+        "B",
+        "C"
+      ],
+      "reading": "とれもろ",
+      "sortKey": "とれもろ",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E3%83%88%E3%83%AC%E3%83%A2%E3%83%AD/1846971732"
+    },
+    {
+      "id": "gnjb-049",
+      "title": "NOW",
+      "categories": [
+        "C"
+      ],
+      "reading": "なう",
+      "sortKey": "なう",
+      "appleMusicUrl": "https://music.apple.com/jp/song/now/1863847515"
+    },
+    {
+      "id": "gnjb-037",
+      "title": "夏の二等辺大三角形",
+      "categories": [
+        "B",
+        "C"
+      ],
+      "reading": "なつのにとうへんだいさんかくけい",
+      "sortKey": "なつのにとうへんだいさんかくけい",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E5%A4%8F%E3%81%AE%E4%BA%8C%E7%AD%89%E8%BE%BA%E5%A4%A7%E4%B8%89%E8%A7%92%E5%BD%A2/1687442144"
+    },
+    {
+      "id": "gnjb-070",
+      "title": "鳴らして、シンバル",
+      "categories": [
+        "C",
+        "D"
+      ],
+      "reading": "ならしてしんばる",
+      "sortKey": "ならしてしんばる",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E9%B3%B4%E3%82%89%E3%81%97%E3%81%A6-%E3%82%B7%E3%83%B3%E3%83%90%E3%83%AB/1698289577"
+    },
+    {
+      "id": "gnjb-003",
+      "title": "ニヒリズムプリズム",
+      "categories": [
+        "A",
+        "C"
+      ],
+      "reading": "にひりずむぷりずむ",
+      "sortKey": "にひりずむぷりずむ",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E3%83%8B%E3%83%92%E3%83%AA%E3%82%BA%E3%83%A0%E3%83%97%E3%83%AA%E3%82%BA%E3%83%A0/1877826343"
+    },
+    {
+      "id": "gnjb-043",
+      "title": "ネバーエンドロール",
+      "categories": [
+        "C"
+      ],
+      "reading": "ねばーえんどろーる",
+      "sortKey": "ねばーえんどろーる",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E3%83%8D%E3%83%90%E3%83%BC%E3%82%A8%E3%83%B3%E3%83%89%E3%83%AD%E3%83%BC%E3%83%AB/1542565725"
+    },
+    {
+      "id": "gnjb-036",
+      "title": "Paradox Re:Write",
+      "categories": [
+        "A",
+        "D"
+      ],
+      "reading": "ぱらどっくすりらいと",
+      "sortKey": "ぱらどっくすりらいと",
+      "appleMusicUrl": "https://music.apple.com/jp/song/paradox-re-write/1807467636"
+    },
+    {
+      "id": "gnjb-007",
+      "title": "パラノイドランデブー",
+      "categories": [
+        "A"
+      ],
+      "reading": "ぱらのいどらんでぶー",
+      "sortKey": "ぱらのいどらんでぶー",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E3%83%91%E3%83%A9%E3%83%8E%E3%82%A4%E3%83%89%E3%83%A9%E3%83%B3%E3%83%87%E3%83%96%E3%83%BC/1840593956"
+    },
+    {
+      "id": "gnjb-060",
+      "title": "半分相逢傘",
+      "categories": [
+        "C"
+      ],
+      "reading": "はんぶんあいあいがさ",
+      "sortKey": "はんぶんあいあいがさ",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E5%8D%8A%E5%88%86%E7%9B%B8%E9%80%A2%E5%82%98/1587574654"
+    },
+    {
+      "id": "gnjb-040",
+      "title": "ビネットネット",
+      "categories": [
+        "A",
+        "C"
+      ],
+      "reading": "びねっとねっと",
+      "sortKey": "びねっとねっと",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E3%83%93%E3%83%8D%E3%83%83%E3%83%88%E3%83%8D%E3%83%83%E3%83%88/1843294375"
+    },
+    {
+      "id": "gnjb-042",
+      "title": "フィナーレ",
+      "categories": [
+        "B",
+        "C"
+      ],
+      "reading": "ふぃなーれ",
+      "sortKey": "ふぃなーれ",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E3%83%95%E3%82%A3%E3%83%8A%E3%83%BC%E3%83%AC/1807467627"
+    },
+    {
+      "id": "gnjb-067",
+      "title": "Foxy Grape",
+      "categories": [
+        "B",
+        "D"
+      ],
+      "reading": "ふぉくしーぐれーぷ",
+      "sortKey": "ふぉくしーぐれーぷ",
+      "appleMusicUrl": "https://music.apple.com/jp/song/foxy-grape/1687442140"
+    },
+    {
+      "id": "gnjb-011",
+      "title": "P-P-P-PERO",
+      "categories": [
+        "B",
+        "D"
+      ],
+      "reading": "ぺろ",
+      "sortKey": "ぺろ",
+      "appleMusicUrl": "https://music.apple.com/jp/song/p-p-p-pero/1751439106"
+    },
+    {
+      "id": "gnjb-075",
+      "title": "放課後ギュッと",
+      "categories": [
+        "B",
+        "D"
+      ],
+      "reading": "ほうかごぎゅっと",
+      "sortKey": "ほうかごぎゅっと",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E6%94%BE%E8%AA%B2%E5%BE%8C%E3%82%AE%E3%83%A5%E3%83%83%E3%81%A8/1675801831"
+    },
+    {
+      "id": "gnjb-013",
+      "title": "方程式は恋模様",
+      "categories": [
+        "B",
+        "C"
+      ],
+      "reading": "ほうていしきはこいもよう",
+      "sortKey": "ほうていしきはこいもよう",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E6%96%B9%E7%A8%8B%E5%BC%8F%E3%81%AF%E6%81%8B%E6%A8%A1%E6%A7%98/1807467628"
+    },
+    {
+      "id": "gnjb-072",
+      "title": "僕らの世界・物語",
+      "categories": [
+        "C",
+        "D"
+      ],
+      "reading": "ぼくらのせかいものがたり",
+      "sortKey": "ぼくらのせかいものがたり",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E5%83%95%E3%82%89%E3%81%AE%E4%B8%96%E7%95%8C-%E7%89%A9%E8%AA%9E/1661239127"
+    },
+    {
+      "id": "gnjb-018",
+      "title": "Mania",
+      "categories": [
+        "B",
+        "D"
+      ],
+      "reading": "まにあ",
+      "sortKey": "まにあ",
+      "appleMusicUrl": "https://music.apple.com/jp/song/mania/1739073855"
+    },
+    {
+      "id": "gnjb-063",
+      "title": "魔法をかけて",
+      "categories": [
+        "B",
+        "C"
+      ],
+      "reading": "まほうをかけて",
+      "sortKey": "まほうをかけて",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E9%AD%94%E6%B3%95%E3%82%92%E3%81%8B%E3%81%91%E3%81%A6/1658726617"
+    },
+    {
+      "id": "gnjb-030",
+      "title": "マルチバース・アドベンチャー",
+      "categories": [
+        "A",
+        "C"
+      ],
+      "reading": "まるちばーすあどべんちゃー",
+      "sortKey": "まるちばーすあどべんちゃー",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E3%83%9E%E3%83%AB%E3%83%81%E3%83%90%E3%83%BC%E3%82%B9-%E3%82%A2%E3%83%89%E3%83%99%E3%83%B3%E3%83%81%E3%83%A3%E3%83%BC/1725299728"
+    },
+    {
+      "id": "gnjb-071",
+      "title": "Mr.Android(feat. izki)",
+      "categories": [
+        "A",
+        "C"
+      ],
+      "reading": "みすたーあんどろいど",
+      "sortKey": "みすたーあんどろいど",
+      "appleMusicUrl": "https://music.apple.com/jp/song/mr-android-feat-izki/1674097167"
+    },
+    {
+      "id": "gnjb-014",
+      "title": "Museum:0",
+      "categories": [
+        "C"
+      ],
+      "reading": "みゅーじあむぜろ",
+      "sortKey": "みゅーじあむぜろ",
+      "appleMusicUrl": "https://music.apple.com/jp/song/museum-0/1711147670"
+    },
+    {
+      "id": "gnjb-021",
+      "title": "無限シニシズム",
+      "categories": [
+        "A",
+        "B"
+      ],
+      "reading": "むげんしにしずむ",
+      "sortKey": "むげんしにしずむ",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E7%84%A1%E9%99%90%E3%82%B7%E3%83%8B%E3%82%B7%E3%82%BA%E3%83%A0/1661238574"
+    },
+    {
+      "id": "gnjb-044",
+      "title": "灼けゆく青",
+      "categories": [
+        "C"
+      ],
+      "reading": "やけゆくあお",
+      "sortKey": "やけゆくあお",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E7%81%BC%E3%81%91%E3%82%86%E3%81%8F%E9%9D%92/1580333930"
+    },
+    {
+      "id": "gnjb-016",
+      "title": "遊戯的反逆ノススメ",
+      "categories": [
+        "A",
+        "D"
+      ],
+      "reading": "ゆうぎてきはんぎゃくのすすめ",
+      "sortKey": "ゆうぎてきはんぎゃくのすすめ",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E9%81%8A%E6%88%AF%E7%9A%84%E5%8F%8D%E9%80%86%E3%83%8E%E3%82%B9%E3%82%B9%E3%83%A1/1778061829"
+    },
+    {
+      "id": "gnjb-045",
+      "title": "夢に唄えば",
+      "categories": [
+        "C",
+        "D"
+      ],
+      "reading": "ゆめにうたえば",
+      "sortKey": "ゆめにうたえば",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E5%A4%A2%E3%81%AB%E5%94%84%E3%81%88%E3%81%B0/1542565721"
+    },
+    {
+      "id": "gnjb-056",
+      "title": "夜夏",
+      "categories": [
+        "C"
+      ],
+      "reading": "よか",
+      "sortKey": "よか",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E5%A4%9C%E5%A4%8F/1595790436"
+    },
+    {
+      "id": "gnjb-019",
+      "title": "余白のための瘡蓋狂想曲",
+      "categories": [
+        "A",
+        "C"
+      ],
+      "reading": "よはくのためのかさぶたきょうそうきょく",
+      "sortKey": "よはくのためのかさぶたきょうそうきょく",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E4%BD%99%E7%99%BD%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AE%E7%98%A1%E8%93%8B%E7%8B%82%E6%83%B3%E6%9B%B2/1687442141"
+    },
+    {
+      "id": "gnjb-041",
+      "title": "Lion",
+      "categories": [
+        "D"
+      ],
+      "reading": "らいおん",
+      "sortKey": "らいおん",
+      "appleMusicUrl": "https://music.apple.com/jp/song/lion/1661238581"
+    },
+    {
+      "id": "gnjb-082",
+      "title": "ラベンダー",
+      "categories": [
+        "B",
+        "C"
+      ],
+      "reading": "らべんだー",
+      "sortKey": "らべんだー",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E3%83%A9%E3%83%99%E3%83%B3%E3%83%80%E3%83%BC/1480622927"
+    },
+    {
+      "id": "gnjb-079",
+      "title": "Run away",
+      "categories": [
+        "B",
+        "C"
+      ],
+      "reading": "らんあうぇい",
+      "sortKey": "らんあうぇい",
+      "appleMusicUrl": "https://music.apple.com/jp/song/run-away/1661238580"
+    },
+    {
+      "id": "gnjb-028",
+      "title": "蝋燭",
+      "categories": [
+        "B",
+        "C"
+      ],
+      "reading": "ろうそく",
+      "sortKey": "ろうそく",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E8%9D%8B%E7%87%AD/1700211716"
+    },
+    {
+      "id": "gnjb-091",
+      "title": "浪漫人（「沼オトコと沼落ちオンナのmidnight call」劇中歌ver.）",
+      "categories": [
+        "A",
+        "C"
+      ],
+      "reading": "ろまんじん",
+      "sortKey": "ろまんじん",
+      "appleMusicUrl": "https://music.apple.com/jp/song/%E6%B5%AA%E6%BC%AB%E4%BA%BA-sole-%E6%B2%BC%E3%82%AA%E3%83%88%E3%82%B3%E5%8A%87%E4%B8%AD%E6%AD%8C-ver/1706313892"
+    }
+  ]
+}</script>
+<script>
+'use strict';
+const DATA = JSON.parse(document.getElementById('song-data').textContent);
+const CATEGORIES = Object.keys(DATA.categoryDefinitions);
+const selected = new Set();
+const collator = new Intl.Collator('ja', { usage: 'sort', sensitivity: 'variant' });
+const sortedSongs = [...DATA.songs].sort((a,b) => collator.compare(a.sortKey,b.sortKey) || a.id.localeCompare(b.id));
+// 未選択=0曲、1〜3選択=AND、4選択=全曲。フィルタ後も読み順を維持。
+function getVisibleSongs(selection) {
+ if (selection.size === 0) return [];
+ if (selection.size === CATEGORIES.length) return sortedSongs;
+ return sortedSongs.filter(song => [...selection].every(category => song.categories.includes(category)));
+}
+function render() {
+ const visible = getVisibleSongs(selected);
+ document.getElementById('count').textContent = `${visible.length}曲`;
+ document.getElementById('mode').textContent = selected.size === 0 ? '未選択' : selected.size === 4 ? 'すべての曲 · あいうえお順' : `${CATEGORIES.filter(c => selected.has(c)).join(' + ')} のすべてに該当 · あいうえお順`;
+ const empty = document.getElementById('empty');
+ empty.hidden = visible.length > 0;
+ empty.textContent = selected.size === 0 ? 'A〜Dから分類を選んでください。' : 'この組み合わせに該当する曲はありません。';
+ document.querySelectorAll('.filter').forEach(button => button.setAttribute('aria-pressed', String(selected.has(button.dataset.category))));
+ const fragment = document.createDocumentFragment();
+ for (const song of visible) {
+  const row = document.createElement('li');row.className = 'song';row.dataset.songId = song.id;
+  const info = document.createElement('div');info.className = 'song-info';
+  const title = document.createElement('p');title.className = 'song-title';title.textContent = song.title;
+  const tags = document.createElement('div');tags.className = 'tags';
+  for (const category of song.categories) {const tag = document.createElement('span');tag.className = 'tag';tag.dataset.category = category;tag.textContent = category;tag.title = DATA.categoryDefinitions[category];tags.append(tag);}
+  info.append(title,tags);
+  const link = document.createElement('a');link.className = 'play';link.textContent = '▶';link.href = song.appleMusicUrl;link.target = '_blank';link.rel = 'noopener noreferrer';link.setAttribute('aria-label', `${song.title}をApple Musicで開く`);link.title = 'Apple Musicで開く';
+  row.append(info,link);fragment.append(row);
+ }
+ document.getElementById('songs').replaceChildren(fragment);
+}
+for (const category of CATEGORIES) {
+ const button = document.createElement('button');button.type = 'button';button.className = 'filter';button.dataset.category = category;button.setAttribute('aria-pressed','false');
+ const letter = document.createElement('span');letter.className = 'letter';letter.textContent = category;
+ const label = document.createElement('span');label.className = 'label';label.textContent = DATA.categoryDefinitions[category];
+ const check = document.createElement('span');check.className = 'check';check.textContent = '✓';check.setAttribute('aria-hidden','true');
+ button.append(letter,label,check);
+ button.addEventListener('click', () => {selected.has(category) ? selected.delete(category) : selected.add(category);render();});
+ document.getElementById('filters').append(button);
+}
+document.getElementById('reset').addEventListener('click', () => {selected.clear();render();});
+render();
+</script>
+</body>
+</html>
