@@ -13,8 +13,8 @@ Apple Musicの契約が必要です。
 
 ## ショートカットの配布リンク
 
-[ショートカットの配布リンク](https://www.icloud.com/shortcuts/991321335b684aa8843bba12f9fdd46b)
-
+[ショートカットの配布リンク]
+(https://www.icloud.com/shortcuts/727a44bafbc14d78901457cee1ebb2cc)
 追加したショートカットの名前は「キュー追加」にしてください。
 
 ## ショートカットの作り方
