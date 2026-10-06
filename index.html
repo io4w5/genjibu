@@ -60,6 +60,20 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-off
 [hidden]{display:none!important}
 @media(min-width:560px){.filters{grid-template-columns:repeat(4,minmax(0,1fr))}.filter{min-height:112px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+.queue{margin:0 0 12px}
+.queue-btn{display:flex;align-items:center;justify-content:center;width:100%;min-height:48px;padding:0 20px;background:var(--accent);color:#fff;border:2px solid var(--accent);border-radius:24px;font-size:15px;font-weight:600;letter-spacing:.06em;line-height:1.4;transition:background-color .15s,border-color .15s}
+.queue-btn:active{background:var(--focus);border-color:var(--focus)}
+.queue-btn:disabled{background:rgba(255,255,255,.5);color:var(--muted);border:2px dashed #9fc3ac;font-weight:400;cursor:default}
+.queue-status{margin:8px 0 0;color:var(--muted);font-size:12px;line-height:1.7}
+.queue-status:empty{margin:0;min-height:0}
+.queue-help{margin:0 0 14px}
+.queue-help p{font-size:12px}
+.queue-help summary{list-style:none;cursor:pointer}
+.queue-help summary::-webkit-details-marker{display:none}
+.queue-help summary::marker{content:""}
+.queue-help ol{padding-left:22px;margin:8px 0}
+.queue-help li{margin:6px 0}
+.shortcut-download{display:inline-block;padding:4px 0;color:var(--accent);font-size:12px;font-weight:400;text-decoration:underline;text-underline-offset:3px}
 </style>
 </head>
 <body>
@@ -69,6 +83,8 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-off
 <fieldset><legend>分類を選択（複数選択可）</legend><div id="filters" class="filters"></div></fieldset>
 <p class="rule">1〜3個を選ぶと、選んだ分類すべてに当てはまる曲を表示。A〜Dをすべて選ぶと全曲を表示します。</p>
 </section>
+<div class="queue"><button id="queue" class="queue-btn" type="button" disabled aria-describedby="queue-status">表示中の曲を再生</button><p id="queue-status" class="queue-status" role="status" aria-live="polite"></p></div>
+<details class="editorial queue-help"><summary>まとめ再生の初回準備</summary><p><a class="shortcut-download" href="https://www.icloud.com/shortcuts/991321335b684aa8843bba12f9fdd46b" target="_blank" rel="noopener noreferrer">ショートカットの配布リンク</a></p><p>再生待ちのキューは置き換わります。ライブラリやプレイリストへの追加は行われません。Apple Musicの契約が必要です。</p></details>
 <section class="results" aria-labelledby="result-title">
 <div class="result-bar"><div class="result-head"><h2 id="result-title">曲リスト</h2><span id="count" class="count" role="status" aria-live="polite" aria-atomic="true">0曲</span><button id="reset" class="reset" type="button">リセット</button></div>
 <p id="mode" class="mode"></p></div>
@@ -997,7 +1013,38 @@ function getVisibleSongs(selection) {
  if (selection.size === CATEGORIES.length) return sortedSongs;
  return sortedSongs.filter(song => [...selection].every(category => song.categories.includes(category)));
 }
+// ---- 表示中の曲を再生（iPhoneのショートカット連携） ----
+const SHORTCUT_NAME = 'キュー追加';
+const NOT_STREAMABLE = new Set();
+function getTrackId(song) {
+  try {
+    const id = (() => { const url = new URL(song.appleMusicUrl); return url.searchParams.get('i') || (/\/song\//.test(url.pathname) ? url.pathname.match(/\/(\d+)\/?$/)?.[1] : '') || String(song.appleMusicTrackId || ''); })();
+    return /^\d+$/.test(id) ? id : '';
+  } catch (error) { return ''; }
+}
+function getQueueSongs() {
+  return getVisibleSongs(selected).filter(song => !NOT_STREAMABLE.has(song.id) && getTrackId(song));
+}
+// 1行1製品ID。表示順を保ち、クリップボードを経由せず直接渡す。
+function buildQueueText(songs) { return songs.map(getTrackId).join('\n'); }
+function buildShortcutUrl(text) {
+  return `shortcuts://run-shortcut?name=${encodeURIComponent(SHORTCUT_NAME)}&input=text&text=${encodeURIComponent(text)}`;
+}
+function addToQueue() {
+  const songs = getQueueSongs();
+  if (songs.length === 0) return;
+  const skipped = getVisibleSongs(selected).length - songs.length;
+  els.queueStatus.textContent = `${songs.length}曲の再生用にショートカットを開きます。` + (skipped ? `対象外の${skipped}曲は除外しています。` : '');
+  location.href = buildShortcutUrl(buildQueueText(songs));
+}
+
+const els = { queue: document.getElementById('queue'), queueStatus: document.getElementById('queue-status') };
 function render() {
+ const queueCount = getQueueSongs().length;
+ els.queue.disabled = queueCount === 0;
+ els.queue.textContent = queueCount === 0 ? '表示中の曲を再生' : `表示中の${queueCount}曲を再生`;
+ els.queueStatus.textContent = '';
+
  const visible = getVisibleSongs(selected);
  document.getElementById('count').textContent = `${visible.length}曲`;
  document.getElementById('mode').textContent = selected.size === 0 ? '未選択' : selected.size === 4 ? 'すべての曲 · あいうえお順' : `${CATEGORIES.filter(c => selected.has(c)).join(' + ')} のすべてに該当 · あいうえお順`;
@@ -1027,6 +1074,7 @@ for (const category of CATEGORIES) {
  button.addEventListener('click', () => {selected.has(category) ? selected.delete(category) : selected.add(category);render();});
  document.getElementById('filters').append(button);
 }
+els.queue.addEventListener('click', addToQueue);
 document.getElementById('reset').addEventListener('click', () => {selected.clear();render();});
 render();
 </script>
